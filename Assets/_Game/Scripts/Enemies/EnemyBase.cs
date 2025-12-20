@@ -3,13 +3,19 @@ using UnityEngine;
 public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Base Settings")]
+    [Tooltip("Dusmanin hareket hizi")]
     [SerializeField] protected float moveSpeed = 2f;
-    [SerializeField] protected int maxHealth = 1;
-    [SerializeField] protected int damagetoBase = 10; // Kacarsa uste verilecek hasar
 
+    [Tooltip("Dusmanin maksimum cani")]
+    [SerializeField] protected int maxHealth = 1;
+
+    [Tooltip("Dusman asagidan kacarsa veya bize carparsa enerjimizden ne kadar gidecek")]
+    [SerializeField] protected int damageToBase = 10;
+
+    // Anlik cani tutan degisken
     protected int currentHealth;
 
-    // OnEnable: Obje havuzdan her ciktiginda calisir (Start yerine gecer)
+    // Obje havuzdan her ciktiginda (Spawn oldugunda) calisir
     protected virtual void OnEnable()
     {
         currentHealth = maxHealth;
@@ -17,32 +23,40 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        // 1. Hareketi yap (Cocuklar bunu degistirebilir)
+        // 1. Hareket mantigi (Cocuk siniflar bunu degistirebilir)
         Move();
 
-        // 2. Sinir kontrolu (Ekrandan cikti mi?)
+        // 2. Sinir kontrolu
         CheckOutOfBounds();
     }
 
-    // "virtual" demek: Cocuk siniflar bu metodu kendine gore degistirebilir (Override)
+    // Standart hareket: Dumduz asagi
     protected virtual void Move()
     {
-        // Varsayilan hareket: Dumduz asagi
         transform.Translate(Vector2.down * moveSpeed * Time.deltaTime);
     }
 
     private void CheckOutOfBounds()
     {
-        if (transform.position.y < -6f) // Ekranin alti
+        // Ekranin alt sinirindan (Y: -6) cikarsa
+        if (transform.position.y < -6f)
         {
-            // TODO: Ileride burada GameManager.Instance.TakeDamage(damageToBase) cagiracagiz.
+            // GameManager'a haber ver ve hasar uygula
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.TakeDamage(damageToBase);
+            }
+
+            // Dusmani havuza geri gonder
             ReturnToPool();
         }
     }
 
+    // Disaridan (Mermiden vs.) hasar alma fonksiyonu
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
+
         if (currentHealth <= 0)
         {
             Die();
@@ -51,7 +65,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        // TODO: Ileride buraya patlama efekti ve ses ekleyecegiz.
+        // Ileride buraya patlama efekti (Particle) ve ses eklenecek
         ReturnToPool();
     }
 
@@ -60,23 +74,30 @@ public abstract class EnemyBase : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    // Carpisma mantigi
+    // Carpisma Algilama
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Eger mermi carparsa
+        // 1. Eger bize Mermi carparsa
         if (other.CompareTag("PlayerBullet"))
         {
-            // Mermiyi havuza gonder
+            // Mermiyi yok etme, havuza geri gonder
             other.gameObject.SetActive(false);
 
             // Hasar al
             TakeDamage(1);
         }
-        // Eger oyuncuya carparsa
+        // 2. Eger OYUNCUYA carparsa (Kamikaze)
         else if (other.CompareTag("Player"))
         {
-            // TODO: Oyuncuya hasar ver
-            ReturnToPool();
+            // GameManager'a haber ver.
+            // Dogrudan carpisma oldugu icin ceza olarak 2 kat hasar veriyoruz.
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.TakeDamage(damageToBase * 2);
+            }
+
+            // Dusman carpmanin etkisiyle yok olur
+            Die();
         }
     }
 }

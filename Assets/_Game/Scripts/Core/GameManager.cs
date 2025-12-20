@@ -1,21 +1,22 @@
 using UnityEngine;
+using System; // Action kullanmak icin gerekli kutuphane
 
 public class GameManager : MonoBehaviour
 {
-    // Singleton: Her yerden erisilebilir tek patron
     public static GameManager Instance { get; private set; }
+
+    // UI veya baska sistemlerin dinleyebilecegi bir "Olay" (Event) tanimliyoruz.
+    // Bu olay, tetiklendiginde yaninda bir tamsayi (int) tasiyacak.
+    public event Action<int> OnEnergyChanged;
 
     [Header("Game Settings")]
     [Tooltip("Baslangic enerjimiz (Canimiz)")]
     [SerializeField] private int maxEnergy = 100;
 
-    // Oyundaki anlik enerji durumumuz
-    // Sadece buradan degistirilsin (private set), disaridan sadece okunsun (public get)
     public int CurrentEnergy { get; private set; }
 
     private void Awake()
     {
-        // Singleton Kurulumu
         if (Instance == null)
         {
             Instance = this;
@@ -28,20 +29,24 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // Oyuna tam canla basla
         CurrentEnergy = maxEnergy;
-        Debug.Log("Oyun Basladi! Enerji: " + CurrentEnergy);
+
+        // Oyun baslar baslamaz UI'in guncellenmesi icin olayi bir kez tetikliyoruz.
+        if (OnEnergyChanged != null)
+        {
+            OnEnergyChanged.Invoke(CurrentEnergy);
+        }
     }
 
-    // Hasar alma fonksiyonu (Disaridan cagirilacak)
     public void TakeDamage(int amount)
     {
         CurrentEnergy -= amount;
 
-        // Eksiye dusmesin diye 0'a sabitliyoruz
         if (CurrentEnergy < 0) CurrentEnergy = 0;
 
-        Debug.Log($"Hasar Alindi: -{amount}. Kalan Enerji: {CurrentEnergy}");
+        // Enerji degisti! Dinleyen herkese (UI) haber ver.
+        // ?.Invoke su demektir: "Eger dinleyen varsa calistir, yoksa hata verme."
+        OnEnergyChanged?.Invoke(CurrentEnergy);
 
         if (CurrentEnergy <= 0)
         {
@@ -51,9 +56,7 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("OYUN BITTI! (GAME OVER)");
-        // Ileride buraya "Yeniden Basla" ekranini acan kodu yazacagiz.
-        // Simdilik oyunu donduralim.
+        Debug.Log("GAME OVER");
         Time.timeScale = 0f;
     }
 }

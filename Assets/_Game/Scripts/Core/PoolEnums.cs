@@ -3,6 +3,8 @@
 public enum PooledObjectType
 {
     PlayerBullet,
+    EnemyBullet,
     ScoutEnemy,
-    HeavyEnemy
+    HeavyEnemy,
+    ShooterEnemy
 }

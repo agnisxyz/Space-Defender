@@ -3,20 +3,29 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Spawn Settings")]
-    // Hangi dusman turunu uretecegimizi seciyoruz
-    [SerializeField] private PooledObjectType enemyType = PooledObjectType.ScoutEnemy;
-
     [Tooltip("Kac saniyede bir dusman gelecek")]
     [SerializeField] private float spawnRate = 1.5f;
 
     [Tooltip("Yatay eksende rastgele dogus araligi")]
-    [SerializeField] private float xSpawnRange = 2.5f;
+    [SerializeField] private float xSpawnRange = 1.8f;
 
     [Tooltip("Dikey eksende dogus yuksekligi")]
     [SerializeField] private float ySpawnPosition = 6f;
 
-    // Alt tire kaldirildi
+    // Tek bir tur yerine, ihtimalleri dizi olarak tutuyoruz
+    private PooledObjectType[] enemyTypes;
     private float spawnTimer;
+
+    private void Start()
+    {
+        // Spawner'in uretebilecegi dusman listesini hazirliyoruz
+        enemyTypes = new PooledObjectType[]
+        {
+            PooledObjectType.ScoutEnemy,
+            PooledObjectType.HeavyEnemy,
+            PooledObjectType.ShooterEnemy
+        };
+    }
 
     private void Update()
     {
@@ -24,17 +33,25 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnTimer >= spawnRate)
         {
-            SpawnEnemy();
+            SpawnRandomEnemy();
             spawnTimer = 0f;
         }
     }
 
-    private void SpawnEnemy()
+    private void SpawnRandomEnemy()
     {
+        // Rastgele bir pozisyon
         float randomX = Random.Range(-xSpawnRange, xSpawnRange);
         Vector2 spawnPos = new Vector2(randomX, ySpawnPosition);
 
-        // Object Pool Manager uzerinden dusman istiyoruz
-        ObjectPoolManager.Instance.GetPooledObject(enemyType, spawnPos, Quaternion.identity);
+        // Rastgele bir dusman turu sec (0, 1 veya 2)
+        int randomIndex = Random.Range(0, enemyTypes.Length);
+        PooledObjectType selectedType = enemyTypes[randomIndex];
+
+        // Secilen dusmani havuzdan cagir
+        if (ObjectPoolManager.Instance != null)
+        {
+            ObjectPoolManager.Instance.GetPooledObject(selectedType, spawnPos, Quaternion.identity);
+        }
     }
 }
