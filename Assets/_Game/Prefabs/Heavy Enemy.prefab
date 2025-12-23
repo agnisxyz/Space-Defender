@@ -148,7 +148,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3786895863297615376}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -181,4 +181,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HeavyEnemy
   moveSpeed: 1
   maxHealth: 5
-  damagetoBase: 10
+  damageToBase: 10
+  scoreValue: 25

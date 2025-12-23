@@ -108,7 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoutEnemy
   moveSpeed: 1.5
   maxHealth: 1
-  damagetoBase: 10
+  damageToBase: 10
+  scoreValue: 5
   frequency: 7
   magnitude: 5
 --- !u!61 &2823493552769304692

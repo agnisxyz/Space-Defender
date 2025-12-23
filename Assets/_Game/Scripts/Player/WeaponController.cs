@@ -3,7 +3,7 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     [Header("Gun Settings")]
-    [Tooltip("Saniyede kac saniye arayla ates edilecek")]
+    [Tooltip("Saniyede kac saniye arayla ates edilecek (Orn: 0.2 seri atis)")]
     [SerializeField] private float fireRate = 0.2f;
 
     [Header("References")]
@@ -14,33 +14,23 @@ public class WeaponController : MonoBehaviour
 
     private void Update()
     {
-        // --- TEST MODU (MANUEL ATES) ---
-        // Sadece Space tusuna basildiginda ates et.
-        // GetKeyDown: Tusa bastigin an 1 kere calisir.
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
-
-        // --- NORMAL MOD (OTOMATIK ATES) ---
-        // Test bitince yukaridaki kodu silip buradaki yorum satirlarini kaldir.
-        /*
+        // 1. Ates etme zamanlayicisi surekli saysin
         fireTimer += Time.deltaTime;
 
-        if (fireTimer >= fireRate)
+        // 2. KONTROL:
+        // Input.GetMouseButton(0) -> Sol tik BASILI TUTULDUGU SURECE true doner.
+        // fireTimer >= fireRate -> Silahin soguma suresi doldu mu?
+        if (Input.GetMouseButton(0) && fireTimer >= fireRate)
         {
             Shoot();
-            
-            // Ates ettikten sonra zamanlayiciyi sifirla
+
+            // Ates ettikten sonra sayaci sifirla
             fireTimer = 0f;
         }
-        */
     }
 
     private void Shoot()
     {
-        // Singleton yapisina erisip mermi istiyoruz.
-        // Hata olmamasi icin null kontrolu yapiyoruz (Best Practice).
         if (ObjectPoolManager.Instance != null)
         {
             ObjectPoolManager.Instance.GetPooledObject(

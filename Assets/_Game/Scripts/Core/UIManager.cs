@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnEnergyChanged += UpdateEnergyUI;
+            // 2. YENI SATIR: Baslangic degerini hemen elle cek ve guncelle
+            // Bu satir sayesinde oyun acilir acilmaz bar fullenir.
+            UpdateEnergyUI(GameManager.Instance.CurrentEnergy);
         }
     }
 

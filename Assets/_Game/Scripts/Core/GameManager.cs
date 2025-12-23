@@ -1,19 +1,23 @@
 using UnityEngine;
-using System; // Action kullanmak icin gerekli kutuphane
+using System;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    // UI veya baska sistemlerin dinleyebilecegi bir "Olay" (Event) tanimliyoruz.
-    // Bu olay, tetiklendiginde yaninda bir tamsayi (int) tasiyacak.
     public event Action<int> OnEnergyChanged;
 
     [Header("Game Settings")]
-    [Tooltip("Baslangic enerjimiz (Canimiz)")]
     [SerializeField] private int maxEnergy = 100;
 
+    [Header("References")]
+    // Game Over scriptine erisim
+    [SerializeField] private GameOverUI gameOverUI;
+
     public int CurrentEnergy { get; private set; }
+
+    // Oyunun bitip bitmedigini kontrol eden bayrak
+    private bool isGameOver = false;
 
     private void Awake()
     {
@@ -30,8 +34,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CurrentEnergy = maxEnergy;
+        Time.timeScale = 1f; // Her ihtimale karsi zamani baslat
 
-        // Oyun baslar baslamaz UI'in guncellenmesi icin olayi bir kez tetikliyoruz.
         if (OnEnergyChanged != null)
         {
             OnEnergyChanged.Invoke(CurrentEnergy);
@@ -40,12 +44,13 @@ public class GameManager : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        // Oyun zaten bittiyse daha fazla hasar alma
+        if (isGameOver) return;
+
         CurrentEnergy -= amount;
 
         if (CurrentEnergy < 0) CurrentEnergy = 0;
 
-        // Enerji degisti! Dinleyen herkese (UI) haber ver.
-        // ?.Invoke su demektir: "Eger dinleyen varsa calistir, yoksa hata verme."
         OnEnergyChanged?.Invoke(CurrentEnergy);
 
         if (CurrentEnergy <= 0)
@@ -56,7 +61,28 @@ public class GameManager : MonoBehaviour
 
     private void GameOver()
     {
-        Debug.Log("GAME OVER");
+        isGameOver = true;
+
+        // Zamani durdur (Her sey donar)
         Time.timeScale = 0f;
+
+        // Su anki puani al (ScoreManager'dan)
+        int finalScore = 0;
+        if (ScoreManager.Instance != null)
+        {
+            // ScoreManager'a "CurrentScore" diye bir property eklemedik, 
+            // ama simdilik erismek yerine basitce ScoreManager'i public yapabiliriz 
+            // ya da direkt ScoreManager singleton'indan cekebiliriz.
+            // *Not: ScoreManager kodunda currentScore private oldugu icin erisemeyebiliriz.
+            // PRATIK COZUM: ScoreManager'a bir "GetScore" metodu ekleyelim ya da public yapalim.
+            // Simdilik 0 gonderiyorum, asagidaki notu oku.
+            finalScore = ScoreManager.Instance.GetCurrentScore();
+        }
+
+        // UI'a haber ver
+        if (gameOverUI != null)
+        {
+            gameOverUI.ShowGameOver(finalScore);
+        }
     }
 }
