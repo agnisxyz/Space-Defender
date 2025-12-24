@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4827492731571545803}
   - component: {fileID: 4857959691081492797}
   - component: {fileID: 1136477188096639158}
-  - component: {fileID: 2823493552769304692}
   - component: {fileID: 2094910540326321517}
+  - component: {fileID: 5767636795541937944}
   m_Layer: 0
   m_Name: Scout Enemy
   m_TagString: Untagged
@@ -82,10 +82,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.8489028, b: 0, a: 1}
+  m_Sprite: {fileID: 464992478203577774, guid: e99d1bedfa6c50441bb1be8e75e3ccfa, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -112,8 +112,35 @@ MonoBehaviour:
   scoreValue: 5
   frequency: 7
   magnitude: 5
---- !u!61 &2823493552769304692
-BoxCollider2D:
+--- !u!50 &2094910540326321517
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2842112097349909661}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &5767636795541937944
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -150,38 +177,29 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.04, y: 0.84}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!50 &2094910540326321517
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2842112097349909661}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.251056, y: -0.41851297}
+      - {x: 0.5234052, y: 0.05894401}
+      - {x: 0.5234052, y: 0.16978471}
+      - {x: 0.35129339, y: 0.16976285}
+      - {x: 0.1839956, y: 0.31170613}
+      - {x: 0.18510775, y: 0.33616337}
+      - {x: 0.0006248839, y: 0.42170277}
+      - {x: -0.18385802, y: 0.33657306}
+      - {x: -0.1861202, y: 0.30683205}
+      - {x: -0.35549447, y: 0.17132527}
+      - {x: -0.52, y: 0.16637914}
+      - {x: -0.5217026, y: 0.062564865}
+      - {x: -0.2478663, y: -0.42021528}
+      - {x: -0.062349245, y: -0.41829768}
+      - {x: -0.07045287, y: -0.26657304}
+      - {x: 0.0734047, y: -0.26692954}
+      - {x: 0.060215548, y: -0.4182972}
+  m_UseDelaunayMesh: 1
