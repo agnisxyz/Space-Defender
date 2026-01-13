@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9871397093bdf7f4b9541332a58f3f36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeavyEnemy
-  moveSpeed: 1
+  moveSpeed: 1.25
   maxHealth: 5
   damageToBase: 10
   scoreValue: 25
