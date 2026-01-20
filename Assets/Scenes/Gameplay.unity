@@ -1350,6 +1350,9 @@ MonoBehaviour:
   - type: 4
     prefab: {fileID: 8671078339661949928, guid: 8623cfd5977034147b6581734959496f, type: 3}
     initialAmount: 5
+  - type: 5
+    prefab: {fileID: 5048717632956876156, guid: 9417972dd4c122c47881cbd92c9c0c8d, type: 3}
+    initialAmount: 5
 --- !u!4 &1442667155
 Transform:
   m_ObjectHideFlags: 0

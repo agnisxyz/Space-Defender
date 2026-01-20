@@ -61,6 +61,14 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
+
+
+        // 1. Patlama Efektini Cagır
+        // "Explosion" turundeki objeyi, benim oldugum yerde (transform.position) olustur.
+        ObjectPoolManager.Instance.GetPooledObject(PooledObjectType.Explosion, transform.position, Quaternion.identity);
+
+        // 2. Düşmanı Kapat
+        gameObject.SetActive(false);
         // YENI: Olmeden once puani ver
         if (ScoreManager.Instance != null)
         {

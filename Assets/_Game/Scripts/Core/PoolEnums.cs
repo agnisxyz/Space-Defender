@@ -6,5 +6,6 @@ public enum PooledObjectType
     EnemyBullet,
     ScoutEnemy,
     HeavyEnemy,
-    ShooterEnemy
+    ShooterEnemy,
+    Explosion
 }
